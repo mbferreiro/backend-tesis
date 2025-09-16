@@ -1,7 +1,23 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-from . import models, database   # 👈 Import relativo
+from . import models, database
+
+
+from app.routers import (
+    usuario,
+    jugador,
+    equipo,
+    club,
+    club_administrador,
+    administrador_entrenador
+)
+
+
+
+
+# Crea las tablas si no existen
+models.Base.metadata.create_all(bind=database.engine)
 
 app = FastAPI(title="Tesis Backend API")
 
@@ -14,9 +30,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Crea las tablas si no existen
-models.Base.metadata.create_all(bind=database.engine)
-
 # Dependencia para obtener sesión de BD
 def get_db():
     db = database.SessionLocal()
@@ -25,13 +38,17 @@ def get_db():
     finally:
         db.close()
 
+# 🏠 Rutas base
+# --------------
 @app.get("/")
 def root():
     return {"message": "Backend Tesis funcionando 🚀"}
 
-# Ejemplo: listar todos los usuarios
-@app.get("/usuarios/")
-def listar_usuarios(db: Session = Depends(get_db)):
-    return db.query(models.Usuario).all()
-
+# Registrar routers
+app.include_router(usuario.router)
+app.include_router(jugador.router)
+app.include_router(equipo.router)
+app.include_router(club.router)
+app.include_router(club_administrador.router)
+app.include_router(administrador_entrenador.router)
 
