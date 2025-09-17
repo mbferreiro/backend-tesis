@@ -10,11 +10,9 @@ from app.routers import (
     equipo,
     club,
     club_administrador,
-    administrador_entrenador
+    administrador_entrenador,
+    auth_router
 )
-
-
-
 
 # Crea las tablas si no existen
 models.Base.metadata.create_all(bind=database.engine)
@@ -51,4 +49,5 @@ app.include_router(equipo.router)
 app.include_router(club.router)
 app.include_router(club_administrador.router)
 app.include_router(administrador_entrenador.router)
+app.include_router(auth_router.router)
 
