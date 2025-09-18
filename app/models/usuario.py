@@ -11,7 +11,7 @@ class Usuario(Base):
     id = Column(Integer, primary_key=True, index=True)
     nombre = Column(String(120), nullable=False)
     correo = Column(String(150), nullable=False)  # podés agregar unique=True más adelante
-    contrasenia = Column(Text, nullable=False)    # guarda hash, no texto plano
+    id_keycloak = Column(String(255), nullable=False, unique=True)
     id_equipo = Column(Integer, ForeignKey("equipos.id_equipo"))
 
     equipo = relationship("Equipo", back_populates="usuarios")
